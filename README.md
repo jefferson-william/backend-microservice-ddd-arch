@@ -173,3 +173,7 @@ Quando perceber que o _usecase_ está fazendo algo que não é dele e que poderi
 é aí que aplicar `this.queue.publish(orderPlaced)` por exemplo será bem-vindo.
 
 **Obs:** Lembrando que a nomenclatura será sempre do ponto de vista de algo que já aconteceu.
+
+## i18n
+
+- https://i18next.github.io/i18next/node/pages/doc_express.html
