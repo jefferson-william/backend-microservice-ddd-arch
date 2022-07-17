@@ -21,7 +21,7 @@ describe('/login', () => {
       expect(response).toMatchObject(
         expect.objectContaining({
           status: StatusCodes.NOT_FOUND,
-          text: '"User not found"',
+          text: '{"error":[{"message":"User not found"}]}',
         }),
       )
     })
@@ -49,7 +49,7 @@ describe('/login', () => {
       expect(response).toMatchObject(
         expect.objectContaining({
           status: StatusCodes.UNAUTHORIZED,
-          text: '"Invalid password"',
+          text: '{"error":[{"message":"Invalid password"}]}',
         }),
       )
       userRepository.clear()

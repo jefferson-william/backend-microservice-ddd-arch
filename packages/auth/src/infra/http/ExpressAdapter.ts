@@ -24,12 +24,19 @@ export class ExpressAdapter implements Http {
     this.app[method](this.parseUrl(url), async function (req: Request, res: Response) {
       try {
         const output = await callback(req.params, req.body)
+        output.error = []
         res.json(output)
       } catch (error) {
         if (error instanceof InternalError) {
-          res.status(error.code).json(error.message)
+          const output = {
+            error: [{ message: error.message }],
+          }
+          res.status(error.code).json(output)
         } else {
-          res.status(StatusCodes.INTERNAL_SERVER_ERROR).send()
+          const output = {
+            error: [{ message: 'Internal server error' }],
+          }
+          res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(output)
         }
       }
     })
