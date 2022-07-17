@@ -23,8 +23,11 @@ export class ExpressAdapter implements Http {
   on(method: string, url: string, callback: Function): void {
     this.app[method](this.parseUrl(url), async function (req: Request, res: Response) {
       try {
-        const output = await callback(req.params, req.body)
-        output.error = []
+        const data = await callback(req.params, req.body)
+        const output = {
+          data,
+          error: [],
+        }
         res.json(output)
       } catch (error) {
         if (error instanceof InternalError) {

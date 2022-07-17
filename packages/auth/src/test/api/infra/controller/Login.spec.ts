@@ -77,7 +77,12 @@ describe('/login', () => {
         email: 'email@email.com',
         password: '123456',
       })
-      expect(response.body).toHaveProperty('token')
+      expect(response.body).toMatchObject({
+        error: [],
+        data: {
+          token: '',
+        },
+      })
       userRepository.clear()
     })
   })
