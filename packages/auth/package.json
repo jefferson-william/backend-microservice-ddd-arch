@@ -11,7 +11,7 @@
     "lint": "echo 1",
     "jest": "jest",
     "unit": "NODE_ENV=test jest --config jest.unit.js",
-    "integration": "NODE_ENV=test jest --config jest.integration.js --forceExit",
+    "integration": "NODE_ENV=test jest --config jest.integration.js --detectOpenHandles --forceExit",
     "api": "NODE_ENV=test jest --config jest.api.js --detectOpenHandles --forceExit",
     "test": "yarn unit && yarn integration && yarn api",
     "coverage": "yarn unit --coverage && yarn integration --coverage && yarn api --coverage",
