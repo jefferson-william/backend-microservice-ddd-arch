@@ -132,7 +132,7 @@ _Repository_ do DDD é o meio de aplicar _Aggregates_. É possível ter _Aggrega
 Outro exemplo que _Aggregates_ podem acabar tendo 1 _Repository_ que nele tem uma _query_ como abaixo que trás dados de
 outras tabelas.
 
-Quando se quer separar as _queries_ das _mutations_ o conceito de CQRS podem ser aplicada na camada de `application`.
+Quando se quer separar as _queries_ das _mutations_ o conceito de CQRS pode ser aplicado na camada de `application`.
 
 **Exemplo**:
 
@@ -153,3 +153,23 @@ export default class GetOrdersQuery {
   }
 }
 ```
+
+## Event Driven Architecture
+
+As principais pastas com implementações sobre, são:
+
+```
+packages/<module>/application/handler/
+packages/<module>/domain/event/
+packages/<module>/infra/queue
+```
+
+#### Quando é o momento de aplicar o conceito e implementação?
+
+Um exemplo é de quando notar que um `usecase` está quebrando o princípio **SRP** (_Single Responsibility Principle_)
+do SOLID.
+
+Quando perceber que o _usecase_ está fazendo algo que não é dele e que poderia delegar para um processamento posterior,
+é aí que aplicar `this.queue.publish(orderPlaced)` por exemplo será bem-vindo.
+
+**Obs:** Lembrando que a nomenclatura será sempre do ponto de vista de algo que já aconteceu.
