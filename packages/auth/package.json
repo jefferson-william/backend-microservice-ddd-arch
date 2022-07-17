@@ -1,0 +1,31 @@
+{
+  "name": "@server/auth",
+  "private": true,
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "yarn dev",
+    "dev": "make dev",
+    "build": "make build",
+    "lint": "echo 1",
+    "jest": "jest",
+    "unit": "NODE_ENV=test jest --config jest.unit.js",
+    "integration": "NODE_ENV=test jest --config jest.integration.js --forceExit",
+    "api": "NODE_ENV=test jest --config jest.api.js --detectOpenHandles --forceExit",
+    "test": "yarn unit && yarn integration && yarn api",
+    "coverage": "yarn unit --coverage && yarn integration --coverage && yarn api --coverage",
+    "env": "make env",
+    "up": "make up",
+    "pull": "make pull",
+    "bootstrap": "make bootstrap",
+    "types": "tsc -p tsconfig.json --noEmit",
+    "commit": "cz"
+  },
+  "dependencies": {
+    "bcrypt": "5.0.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "5.0.0"
+  }
+}

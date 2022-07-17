@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres:alpine'
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgresql_data:/var/lib/postgresql'
+    env_file:
+      - ../../environment/.env.local
+    networks:
+      - app-net
+      - pgadmin
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - ../../environment/.env.local
+    ports:
+      - '16543:80'
+    depends_on:
+      - postgres
+    networks:
+      - pgadmin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+  zookeeper:
+    image: 'bitnami/zookeeper:3'
+    ports:
+      - '2181:2181'
+      - '8080:8080'
+    volumes:
+      - 'zookeeper_data:/bitnami'
+    env_file:
+      - ../../environment/.env.local
+    networks:
+      - app-net
+    depends_on:
+      - postgres
+
+  kafka:
+    image: 'bitnami/kafka:3'
+    ports:
+      - '9092:9092'
+    volumes:
+      - 'kafka_data:/bitnami'
+    env_file:
+      - ../../environment/.env.local
+    depends_on:
+      - postgres
+      - zookeeper
+    networks:
+      - app-net
+
+networks:
+  pgadmin:
+  app-net:
+    driver: bridge
+
+volumes:
+  pgadmin_data:
+    driver: local
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+  postgresql_data:
+    driver: local
