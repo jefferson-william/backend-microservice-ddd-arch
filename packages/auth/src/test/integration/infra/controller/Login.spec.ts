@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes'
 import { repositoryFactory } from '../../../../infra/factory/RepositoryFactory'
 import { LoginUseCase } from '../../../../application/usecase/LoginUseCase'
 import { User } from '../../../../domain/entity/User'
@@ -35,7 +36,8 @@ describe('LoginUseCase', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError)
         expect(error).toMatchObject({
-          message: 'Missing data',
+          message: 'Dados faltando',
+          code: StatusCodes.BAD_REQUEST,
         })
       }
     })
@@ -46,12 +48,13 @@ describe('LoginUseCase', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundError)
         expect(error).toMatchObject({
-          message: 'User not found',
+          message: 'Usuário não encontrado',
+          code: StatusCodes.NOT_FOUND,
         })
       }
     })
 
-    it('should return user with invalid password error', async () => {
+    it('should return unauthorized by wrong password', async () => {
       const passwordHash = await Crypto.encrypt('123456')
       const userRepository = repositoryFactory.createUserRepository()
       userRepository.save(getUser(passwordHash))
@@ -60,7 +63,8 @@ describe('LoginUseCase', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnauthoriedError)
         expect(error).toMatchObject({
-          message: 'Invalid password',
+          message: 'Senha incorreta',
+          code: StatusCodes.UNAUTHORIZED,
         })
       }
       userRepository.clear()
@@ -81,54 +85,4 @@ describe('LoginUseCase', () => {
       userRepository.clear()
     })
   })
-
-  // it('should return unauthorized by wrong password', async () => {
-  //   const repository = repositoryFactory.createUserRepository()
-  //   const user = getUser()
-  //   repository.save(user)
-  //   const response = await requester.post('/login').send({
-  //     email: 'email@email.com',
-  //     password: 'abcdef',
-  //   })
-  //   expect(response).toMatchObject(
-  //     expect.objectContaining({
-  //       statusCode: StatusCodes.UNAUTHORIZED,
-  //     }),
-  //   )
-  // })
-
-  // it('should not be able to log in for not informing the data', async () => {
-  //   const response = await requester.post('/login')
-  //   expect(response).toMatchObject(
-  //     expect.objectContaining({
-  //       statusCode: StatusCodes.BAD_REQUEST,
-  //     }),
-  //   )
-  // })
-
-  // it('should return unauthorized by wrong password', async () => {
-  //   const repository = repositoryFactory.createUserRepository()
-  //   const user = getUser()
-  //   repository.save(user)
-  //   const response = await requester.post('/login').send({
-  //     email: 'email@email.com',
-  //     password: 'abcdef',
-  //   })
-  //   expect(response).toMatchObject(
-  //     expect.objectContaining({
-  //       statusCode: StatusCodes.UNAUTHORIZED,
-  //     }),
-  //   )
-  // })
-
-  // it('must return the token for the data is correct', async () => {
-  //   const repository = repositoryFactory.createUserRepository()
-  //   const user = getUser()
-  //   repository.save(user)
-  //   const response = await requester.post('/login').send({
-  //     email: 'email@email.com',
-  //     password: '123456',
-  //   })
-  //   expect(response.body).toHaveProperty('token')
-  // })
 })

@@ -1,5 +1,12 @@
 {
-  "errors": {
+  "error": {
     "missing_data": "Dados faltando"
+  },
+  "treatment": {
+    "user_not_found": "Usuário não encontrado",
+    "incorrect_password": "Senha incorreta"
+  },
+  "generic": {
+    "ok": "Ok"
   }
 }

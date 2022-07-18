@@ -1,5 +1,5 @@
 import './src/infra/environment'
-import './src/test/mocks'
+import './src/test/mocks/api'
 import './src/presentation'
 
 if (process.env.DEBUG === 'jest') {

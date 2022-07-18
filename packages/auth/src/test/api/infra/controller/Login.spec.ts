@@ -1,14 +1,19 @@
-import requester, { StatusCodes, repositoryFactory } from '../../../mocks/Requester'
+import requester, { StatusCodes, repositoryFactory, i18n } from '../../../mocks/Requester'
 import { User } from '../../../../domain/entity/User'
 import { Crypto } from '../../../../domain/service/Crypto'
 
 describe('/login', () => {
+  beforeAll(async () => {
+    await i18n.start()
+  })
+
   describe('should test failure', () => {
     it('should not be able to login for not informing the data', async () => {
       const response = await requester.post('/login')
       expect(response).toMatchObject(
         expect.objectContaining({
           status: StatusCodes.BAD_REQUEST,
+          text: '{"error":[{"message":"Dados faltando"}]}',
         }),
       )
     })
@@ -21,7 +26,7 @@ describe('/login', () => {
       expect(response).toMatchObject(
         expect.objectContaining({
           status: StatusCodes.NOT_FOUND,
-          text: '{"error":[{"message":"User not found"}]}',
+          text: '{"error":[{"message":"Usuário não encontrado"}]}',
         }),
       )
     })
@@ -49,7 +54,7 @@ describe('/login', () => {
       expect(response).toMatchObject(
         expect.objectContaining({
           status: StatusCodes.UNAUTHORIZED,
-          text: '{"error":[{"message":"Invalid password"}]}',
+          text: '{"error":[{"message":"Senha incorreta"}]}',
         }),
       )
       userRepository.clear()

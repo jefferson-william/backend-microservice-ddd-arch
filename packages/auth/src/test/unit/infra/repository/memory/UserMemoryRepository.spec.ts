@@ -5,21 +5,21 @@ import { UserMemoryRepository } from '../../../../../infra/repository/memory/Use
 
 describe('UserMemoryRepository', () => {
   describe('should test failure', () => {
-    test('should return error when fetching a non-existent user', async () => {
+    it('should return error when fetching a non-existent user', async () => {
       const userRepository = new UserMemoryRepository()
       try {
         await userRepository.findByEmail('email@email.com')
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundError)
         expect(error).toMatchObject({
-          message: 'User not found',
+          message: 'Usuário não encontrado',
         })
       }
     })
   })
 
   describe('should test success', () => {
-    test('should save and get user', async () => {
+    it('should save and get user', async () => {
       const userRepository = new UserMemoryRepository()
       const passwordHash = await Crypto.encrypt('123456')
       const user = new User(

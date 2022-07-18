@@ -2,6 +2,7 @@ import { NotFoundError } from '../../../domain/error/NotFoundError'
 import { User } from '../../../domain/entity/User'
 import { UserRepository } from '../../../domain/repository/UserRepository'
 import { Environment } from '../../../domain/environment'
+import i18n from '../../../domain/i18n'
 import { Connection } from '../../database/Connection'
 
 export class UserDatabaseRepository implements UserRepository {
@@ -13,19 +14,18 @@ export class UserDatabaseRepository implements UserRepository {
     const [user] = await this.connection.query(`SELECT * FROM ${this.table} WHERE email = $1`, [
       email,
     ])
-    if (!user) throw new NotFoundError('User not found')
-    return new User(
-      {
-        id: user.id,
-        email: user.email,
-        password: user.password,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        uuid: user.uuid,
-        middleName: user.middleName,
-      },
-      user.uuid,
-    )
+    if (!user) throw new NotFoundError(i18n.t('treatment.user_not_found'))
+    return this.getUserInstanced(user)
+  }
+
+  async list(): Promise<User[]> {
+    const users: User[] = await this.connection.query(`SELECT * FROM ${this.table} LIMIT 100`, [])
+    return users.map((user) => this.getUserInstanced(user))
+  }
+
+  async count(): Promise<number> {
+    const [count] = await this.connection.query(`SELECT COUNT(id)::int FROM ${this.table}`, [])
+    return count
   }
 
   async save(user: User): Promise<void> {
@@ -36,6 +36,22 @@ export class UserDatabaseRepository implements UserRepository {
   }
 
   async clear(): Promise<void> {
+    if (!Environment.SERVER.NOT_PRODUCTION) return
     await this.connection.query(`DELETE FROM ${this.table}`, [])
+  }
+
+  private getUserInstanced(userData: User) {
+    return new User(
+      {
+        id: userData.id,
+        email: userData.email,
+        password: userData.password,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        uuid: userData.uuid,
+        middleName: userData.middleName,
+      },
+      userData.uuid as string,
+    )
   }
 }
