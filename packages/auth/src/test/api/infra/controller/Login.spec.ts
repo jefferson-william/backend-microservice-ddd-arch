@@ -1,4 +1,4 @@
-import requester, { StatusCodes, repositoryFactory, i18n } from '../../../mocks/Requester'
+import requester, { StatusCodes, repositoryFactory, i18n } from '../../../mocks'
 import { User } from '../../../../domain/entity/User'
 import { Crypto } from '../../../../domain/service/Crypto'
 
