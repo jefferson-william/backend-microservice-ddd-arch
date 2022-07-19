@@ -7,6 +7,6 @@
     "incorrect_password": "Senha incorreta"
   },
   "generic": {
-    "ok": "Ok"
+    "server_is_ok": "O servidor está ok"
   }
 }

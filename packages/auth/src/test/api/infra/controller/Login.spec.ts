@@ -8,14 +8,26 @@ describe('/login', () => {
   })
 
   describe('should test failure', () => {
-    it('should not be able to login for not informing the data', async () => {
-      const response = await requester.post('/login')
-      expect(response).toMatchObject(
-        expect.objectContaining({
-          status: StatusCodes.BAD_REQUEST,
-          text: '{"error":[{"message":"Dados faltando"}]}',
-        }),
-      )
+    describe('should not be able to login for not informing the data', () => {
+      it('should test in pt-br', async () => {
+        const response = await requester.post('/login')
+        expect(response).toMatchObject(
+          expect.objectContaining({
+            status: StatusCodes.BAD_REQUEST,
+            text: '{"error":[{"message":"Dados faltando"}]}',
+          }),
+        )
+      })
+
+      it('should test in en', async () => {
+        const response = await requester.post('/login?lng=en')
+        expect(response).toMatchObject(
+          expect.objectContaining({
+            status: StatusCodes.BAD_REQUEST,
+            text: '{"error":[{"message":"Missing data"}]}',
+          }),
+        )
+      })
     })
 
     it('should return user not found error', async () => {
@@ -62,7 +74,7 @@ describe('/login', () => {
   })
 
   describe('should test success', () => {
-    it('must return the token for the data is correct', async () => {
+    it('should return the token for the data is correct', async () => {
       const passwordHash = await Crypto.encrypt('123456')
       const userRepository = repositoryFactory.createUserRepository()
       userRepository.save(
