@@ -1,4 +1,4 @@
-import i18n from '../../../domain/i18n'
+import { I18n } from '../../../domain/i18n'
 import { NotFoundError } from '../../../domain/error/NotFoundError'
 import { User } from '../../../domain/entity/User'
 import { UserRepository } from '../../../domain/repository/UserRepository'
@@ -6,11 +6,11 @@ import { UserRepository } from '../../../domain/repository/UserRepository'
 let data: User[] = []
 
 export class UserMemoryRepository implements UserRepository {
-  constructor() {}
+  constructor(private readonly i18n: I18n) {}
 
   async findByEmail(email: string): Promise<User> {
     const user = data.find((user) => user.email === email)
-    if (!user) throw new NotFoundError(i18n.t('treatment.user_not_found'))
+    if (!user) throw new NotFoundError(this.i18n.t('treatment.user_not_found'))
     return user
   }
 

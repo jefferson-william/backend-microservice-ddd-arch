@@ -7,7 +7,7 @@ import { I18n } from '../../domain/i18n'
 export class LoginFactory {
   static getUseCase(repositoryFactory: RepositoryFactory, i18n: I18n) {
     return {
-      login: new LoginUseCase(repositoryFactory.createUserRepository(), i18n),
+      login: new LoginUseCase(repositoryFactory.createUserRepository(i18n), i18n),
     }
   }
 

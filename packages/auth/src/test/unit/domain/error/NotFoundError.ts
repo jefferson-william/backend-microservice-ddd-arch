@@ -10,7 +10,7 @@ describe('NotFoundError', () => {
     try {
       throw new NotFoundError('Testing')
     } catch (error) {
-      expect(error).toMatchObject({ code: StatusCodes.NOT_FOUND })
+      expect(error).toMatchObject({ code: StatusCodes.NOT_FOUND, message: 'Testing' })
       expect(error).toBeInstanceOf(InternalError)
       expect(error).toBeInstanceOf(Error)
     }

@@ -20,8 +20,8 @@ describe('User', () => {
   it('should validate the contract', async () => {
     middleName = ''
     const user = getUser()
-    const userData = user.toJSON()
-    expect(userData).toMatchObject({
+    const userJSON = user.toJSON()
+    const userData = {
       id: user.id,
       email: user.email,
       password: user.password,
@@ -29,7 +29,8 @@ describe('User', () => {
       lastName: user.lastName,
       middleName: user.middleName,
       uuid: user.uuid,
-    })
+    }
+    expect(userData).toMatchObject(userJSON)
   })
 
   it('should generate the instance of an incomplete user', async () => {

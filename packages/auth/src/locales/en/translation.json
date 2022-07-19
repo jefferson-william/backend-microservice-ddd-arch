@@ -1,5 +1,6 @@
 {
   "error": {
+    "internal_server_error": "Internal server error",
     "missing_data": "Missing data"
   },
   "treatment": {

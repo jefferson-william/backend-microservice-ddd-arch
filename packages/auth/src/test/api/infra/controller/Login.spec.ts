@@ -1,10 +1,11 @@
-import requester, { StatusCodes, repositoryFactory, i18n } from '../../../mocks'
+import requester, { StatusCodes, repositoryFactory, i18n as i18next } from '../../../mocks'
+import i18n from '../../../../domain/i18n'
 import { User } from '../../../../domain/entity/User'
 import { Crypto } from '../../../../domain/service/Crypto'
 
 describe('/login', () => {
   beforeAll(async () => {
-    await i18n.start()
+    await i18next.start()
   })
 
   describe('should test failure', () => {
@@ -45,7 +46,7 @@ describe('/login', () => {
 
     it('should return unauthorized by wrong password', async () => {
       const passwordHash = await Crypto.encrypt('123456')
-      const userRepository = repositoryFactory.createUserRepository()
+      const userRepository = repositoryFactory.createUserRepository(i18n)
       userRepository.save(
         new User(
           {
@@ -76,7 +77,7 @@ describe('/login', () => {
   describe('should test success', () => {
     it('should return the token for the data is correct', async () => {
       const passwordHash = await Crypto.encrypt('123456')
-      const userRepository = repositoryFactory.createUserRepository()
+      const userRepository = repositoryFactory.createUserRepository(i18n)
       userRepository.save(
         new User(
           {

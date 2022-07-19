@@ -10,7 +10,7 @@ describe('GenericValidationError', () => {
     try {
       throw new GenericValidationError('Testing')
     } catch (error) {
-      expect(error).toMatchObject({ code: StatusCodes.BAD_REQUEST })
+      expect(error).toMatchObject({ code: StatusCodes.BAD_REQUEST, message: 'Testing' })
       expect(error).toBeInstanceOf(InternalError)
       expect(error).toBeInstanceOf(Error)
     }

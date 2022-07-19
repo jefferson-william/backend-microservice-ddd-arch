@@ -10,7 +10,7 @@ describe('UnauthoriedError', () => {
     try {
       throw new UnauthoriedError('Testing')
     } catch (error) {
-      expect(error).toMatchObject({ code: StatusCodes.UNAUTHORIZED })
+      expect(error).toMatchObject({ code: StatusCodes.UNAUTHORIZED, message: 'Testing' })
       expect(error).toBeInstanceOf(InternalError)
       expect(error).toBeInstanceOf(Error)
     }
