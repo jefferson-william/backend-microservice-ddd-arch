@@ -42,7 +42,7 @@ export class ExpressAdapter implements Http {
           res.status(error.code).json(output)
         } else {
           const output = {
-            error: [{ message: 'Internal server error' }],
+            error: [{ message: req.i18n.t('error.internal_server_error') }],
           }
           res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(output)
         }

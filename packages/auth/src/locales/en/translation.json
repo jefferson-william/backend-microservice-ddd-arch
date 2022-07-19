@@ -1,0 +1,13 @@
+{
+  "error": {
+    "internal_server_error": "Internal server error",
+    "missing_data": "Missing data"
+  },
+  "treatment": {
+    "user_not_found": "User not found",
+    "incorrect_password": "Incorrect password"
+  },
+  "generic": {
+    "server_is_ok": "The server is ok"
+  }
+}

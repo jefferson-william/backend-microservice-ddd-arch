@@ -6,8 +6,10 @@ import { Crypto } from '../../../../domain/service/Crypto'
 import { InputValidationError } from '../../../../domain/error/InputValidationError'
 import { NotFoundError } from '../../../../domain/error/NotFoundError'
 import { UnauthoriedError } from '../../../../domain/error/UnauthoriedError'
+import i18n from '../../../../domain/i18n'
 
-const loginUseCaseFactory = () => new LoginUseCase(repositoryFactory.createUserRepository())
+const loginUseCaseFactory = () =>
+  new LoginUseCase(repositoryFactory.createUserRepository(i18n), i18n)
 const getLoginInput = (password?: string) => ({
   email: 'email@email.com',
   password: password || '123456',
@@ -56,7 +58,7 @@ describe('LoginUseCase', () => {
 
     it('should return unauthorized by wrong password', async () => {
       const passwordHash = await Crypto.encrypt('123456')
-      const userRepository = repositoryFactory.createUserRepository()
+      const userRepository = repositoryFactory.createUserRepository(i18n)
       userRepository.save(getUser(passwordHash))
       try {
         await loginUseCaseFactory().execute(getLoginInput('abcdef'))
@@ -74,7 +76,7 @@ describe('LoginUseCase', () => {
   describe('should test success', () => {
     it('should return user not found error', async () => {
       const passwordHash = await Crypto.encrypt('123456')
-      const userRepository = repositoryFactory.createUserRepository()
+      const userRepository = repositoryFactory.createUserRepository(i18n)
       userRepository.save(getUser(passwordHash))
       const output = await loginUseCaseFactory().execute(getLoginInput())
       expect(output).toMatchObject(

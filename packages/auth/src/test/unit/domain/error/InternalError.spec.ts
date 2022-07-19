@@ -9,7 +9,7 @@ describe('InputValidationError', () => {
     try {
       throw new InputValidationError('Testing')
     } catch (error) {
-      expect(error).toMatchObject({ code: StatusCodes.BAD_REQUEST })
+      expect(error).toMatchObject({ code: StatusCodes.BAD_REQUEST, message: 'Testing' })
       expect(error).toBeInstanceOf(Error)
     }
   })

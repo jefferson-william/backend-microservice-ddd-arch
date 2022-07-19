@@ -1,19 +1,19 @@
-import i18n from '../../domain/i18n'
+import { I18n } from '../../domain/i18n'
 import { Crypto } from '../../domain/service/Crypto'
 import { InputValidationError } from '../../domain/error/InputValidationError'
 import { UserRepository } from '../../domain/repository/UserRepository'
 import { UnauthoriedError } from '../../domain/error/UnauthoriedError'
 
 export class LoginUseCase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository, private readonly i18n: I18n) {}
 
   async execute(input: LoginInput): Promise<LoginOutput> {
     if (!input.email || !input.password) {
-      throw new InputValidationError(i18n.t('error.missing_data'))
+      throw new InputValidationError(this.i18n.t('error.missing_data'))
     }
     const user = await this.userRepository.findByEmail(input.email)
     const comparedPassword = await Crypto.compare(input.password, user.password)
-    if (!comparedPassword) throw new UnauthoriedError(i18n.t('treatment.incorrect_password'))
+    if (!comparedPassword) throw new UnauthoriedError(this.i18n.t('treatment.incorrect_password'))
     return {
       token: '',
     }

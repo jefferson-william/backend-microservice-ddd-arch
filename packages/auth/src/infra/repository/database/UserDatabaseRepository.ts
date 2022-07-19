@@ -2,19 +2,19 @@ import { NotFoundError } from '../../../domain/error/NotFoundError'
 import { User } from '../../../domain/entity/User'
 import { UserRepository } from '../../../domain/repository/UserRepository'
 import { Environment } from '../../../domain/environment'
-import i18n from '../../../domain/i18n'
+import { I18n } from '../../../domain/i18n'
 import { Connection } from '../../database/Connection'
 
 export class UserDatabaseRepository implements UserRepository {
   private table = `${Environment.DB_RELATIONAL.POSTGRES.SCHEMA}.user`
 
-  constructor(private readonly connection: Connection) {}
+  constructor(private readonly connection: Connection, private readonly i18n: I18n) {}
 
   async findByEmail(email: string): Promise<User> {
     const [user] = await this.connection.query(`SELECT * FROM ${this.table} WHERE email = $1`, [
       email,
     ])
-    if (!user) throw new NotFoundError(i18n.t('treatment.user_not_found'))
+    if (!user) throw new NotFoundError(this.i18n.t('treatment.user_not_found'))
     return this.getUserInstanced(user)
   }
 

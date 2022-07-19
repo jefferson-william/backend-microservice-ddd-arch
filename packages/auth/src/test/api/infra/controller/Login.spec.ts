@@ -1,21 +1,34 @@
-import requester, { StatusCodes, repositoryFactory, i18n } from '../../../mocks/Requester'
+import requester, { StatusCodes, repositoryFactory, i18n as i18next } from '../../../mocks'
+import i18n from '../../../../domain/i18n'
 import { User } from '../../../../domain/entity/User'
 import { Crypto } from '../../../../domain/service/Crypto'
 
 describe('/login', () => {
   beforeAll(async () => {
-    await i18n.start()
+    await i18next.start()
   })
 
   describe('should test failure', () => {
-    it('should not be able to login for not informing the data', async () => {
-      const response = await requester.post('/login')
-      expect(response).toMatchObject(
-        expect.objectContaining({
-          status: StatusCodes.BAD_REQUEST,
-          text: '{"error":[{"message":"Dados faltando"}]}',
-        }),
-      )
+    describe('should not be able to login for not informing the data', () => {
+      it('should test in pt-br', async () => {
+        const response = await requester.post('/login')
+        expect(response).toMatchObject(
+          expect.objectContaining({
+            status: StatusCodes.BAD_REQUEST,
+            text: '{"error":[{"message":"Dados faltando"}]}',
+          }),
+        )
+      })
+
+      it('should test in en', async () => {
+        const response = await requester.post('/login?lng=en')
+        expect(response).toMatchObject(
+          expect.objectContaining({
+            status: StatusCodes.BAD_REQUEST,
+            text: '{"error":[{"message":"Missing data"}]}',
+          }),
+        )
+      })
     })
 
     it('should return user not found error', async () => {
@@ -33,7 +46,7 @@ describe('/login', () => {
 
     it('should return unauthorized by wrong password', async () => {
       const passwordHash = await Crypto.encrypt('123456')
-      const userRepository = repositoryFactory.createUserRepository()
+      const userRepository = repositoryFactory.createUserRepository(i18n)
       userRepository.save(
         new User(
           {
@@ -62,9 +75,9 @@ describe('/login', () => {
   })
 
   describe('should test success', () => {
-    it('must return the token for the data is correct', async () => {
+    it('should return the token for the data is correct', async () => {
       const passwordHash = await Crypto.encrypt('123456')
-      const userRepository = repositoryFactory.createUserRepository()
+      const userRepository = repositoryFactory.createUserRepository(i18n)
       userRepository.save(
         new User(
           {
