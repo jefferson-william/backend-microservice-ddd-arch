@@ -1,3 +1,6 @@
 import '../@types/extend-type'
 import '../infra/environment'
-import './presenter/express'
+import { Environment } from '../domain/environment'
+import { httpExpressAdapterFactory } from './presenter/express'
+
+httpExpressAdapterFactory.listen(Environment.SERVER.PORT)

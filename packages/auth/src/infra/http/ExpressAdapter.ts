@@ -50,8 +50,8 @@ export class ExpressAdapter implements Http {
     })
   }
 
-  listen(port: number): void {
-    this.app.listen(port)
+  listen(port: number) {
+    return this.app.listen(port)
   }
 
   getApp() {

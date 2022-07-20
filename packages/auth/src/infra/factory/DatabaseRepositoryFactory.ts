@@ -5,8 +5,8 @@ import { Connection } from '../database/Connection'
 import { UserDatabaseRepository } from '../repository/database/UserDatabaseRepository'
 import { pgPromiseConnectionAdapterFactory } from './PgPromiseConnectionAdapterFactory'
 
-class DatabaseRepositoryFactory implements RepositoryFactory {
-  constructor(private readonly connection: Connection) {}
+export class DatabaseRepositoryFactory implements RepositoryFactory {
+  constructor(readonly connection: Connection) {}
 
   createUserRepository(i18n: I18n): UserRepository {
     return new UserDatabaseRepository(this.connection, i18n)

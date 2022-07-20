@@ -1,4 +1,5 @@
 import Http from './Http'
+// @ts-ignore
 import Hapi from '@hapi/hapi'
 
 export default class HapiAdapter implements Http {
