@@ -1,8 +1,8 @@
-import requester, { i18n } from '../../../mocks'
+import { i18next, requester } from '../../../mocks'
 
 describe('/health', () => {
   beforeAll(async () => {
-    await i18n.start()
+    await i18next.start()
   })
 
   describe('should test failure', () => {})

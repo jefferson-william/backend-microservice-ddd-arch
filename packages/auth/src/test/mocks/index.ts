@@ -1,17 +1,16 @@
-import test from 'supertest'
+import supertest from 'supertest'
 import { httpAdapterFactory } from '../../infra/factory/HttpAdapterFactory'
 
-const requester = test(httpAdapterFactory.getApp())
+export const app = httpAdapterFactory.getApp()
 
-export type Requester = typeof requester
+export const requester = supertest(app)
 
-export class i18n {
+export class i18next {
   static async start() {
     await requester.get('/health')
   }
 }
 
 export { StatusCodes } from 'http-status-codes'
+export { default as supertest } from 'supertest'
 export { repositoryFactory } from '../../infra/factory/RepositoryFactory'
-
-export default requester

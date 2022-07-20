@@ -15,7 +15,7 @@ init: pull
 	yarn install
 
 build:
-	rimraf dist && tsc -p tsconfig.json
+	rimraf dist && tsc -p ../../tsconfig.json
 
 dev:
 	NODE_ENV=development tsnd --respawn -r tsconfig-paths/register src/presentation/index.ts
@@ -27,6 +27,11 @@ unit:
 
 integration:
 	yarn integration
+
+test:
+	yarn unit
+	yarn integration
+	yarn api
 
 kill:
 	lsof -i tcp:3001 | awk 'NR!=1 {print $2}' | xargs kill
