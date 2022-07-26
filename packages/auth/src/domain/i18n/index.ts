@@ -9,15 +9,15 @@ export interface I18n extends i18nInterface {}
 const i18n = i18next
 
 export const init = async () => {
-  const localesFolder = join(__dirname, '../../locales')
+  const localesFolder = join(__dirname, '../locales')
 
   const promise = i18n
     .use(i18nBackend)
     .use(i18nMiddleware.LanguageDetector)
     .init({
-      fallbackLng: 'pt-br',
+      fallbackLng: 'pt-BR',
       backend: {
-        loadPath: join(__dirname, '../../locales/{{lng}}/translation.json'),
+        loadPath: join(localesFolder, '/{{lng}}/translation.json'),
       },
       preload: readdirSync(localesFolder).filter((fileName) => {
         const joinedPath = join(localesFolder, fileName)

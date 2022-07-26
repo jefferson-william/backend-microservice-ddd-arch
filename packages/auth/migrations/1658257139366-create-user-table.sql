@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS "user" (
+  id INT PRIMARY KEY,
+  uuid uuid DEFAULT NOT NULL,
+  email VARCHAR NOT NULL,
+  password VARCHAR NOT NULL
+);

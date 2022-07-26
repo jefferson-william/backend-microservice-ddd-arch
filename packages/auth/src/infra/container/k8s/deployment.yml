@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-auth
+  template:
+    metadata:
+      labels:
+        app: server-auth
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '3001'
+        prometheus.io/path: '/health'
+    spec:
+      containers:
+        - name: server-auth
+          image: jefferson-william/server-auth:latest
+          envFrom:
+            - configMapRef:
+                name: server-auth-env
+          volumeMounts:
+            - name: server-auth-config
+              mountPath: /app/config
+      volumes:
+        - name: server-auth-config
+          configMap:
+            name: server-auth-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-auth
+spec:
+  selector:
+    app: server-auth
+  ports:
+    - port: 3001
+      targetPort: 3001
+      nodePort: 30001
+  type: LoadBalancer

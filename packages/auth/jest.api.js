@@ -3,7 +3,7 @@ module.exports = {
   testEnvironment: 'node',
   globals: {
     'ts-jest': {
-      tsconfig: '../../tsconfig.api.json',
+      tsconfig: 'tsconfig.api.json',
     },
   },
   setupFiles: ['<rootDir>/jest.setup.api.ts'],

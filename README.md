@@ -177,3 +177,97 @@ Quando perceber que o _usecase_ está fazendo algo que não é dele e que poderi
 ## i18n
 
 - https://i18next.github.io/i18next/node/pages/doc_express.html
+
+# Container
+
+Nesse projeto estarei usando **Kubernates** para desenvolver e _deploys_ via algumas das ferramentas abaixo. Instale para usar.
+
+## Execução
+
+Após as instalações abaixo, rode:
+
+```sh
+kind create cluster # Primeiro levante o cluster do kind para skaffold fazer push da imagem do máquina local
+kubectl get nodes # Veja se deu certo
+skaffold init # Prepare o ambiente. Escolha: 1) Dockerfile 2) None 3) Enter
+skaffold run # Irá buildar e rodar os containers. Se precisar rode novamente
+kubectl get pod # Ver os pods
+kubectl get svc # Ver os IPs e portas
+kubectl get all # Ver todos os pods
+kubectl port-forward svc/auth 3001:3001 # Expor a porta do container para sua máquina local
+skaffold delete # Deletar o que foi executado na pipeline inicial
+skaffold run --port-forward # Irá reconstruir a imagem exportando as portas dos containers para máquina local
+skaffold dev --port-forward # Rodar em modo desenvolvimento para exibição dos logs
+skaffold debug --port-forward # Rodar em modo desenvolvimento com debug
+helm list # Se o Kubernates executar com Helm este comando irá listar aquilo que ele está trabalhando
+kubectl describe pod <container> # Pegue o nome do container em execução via kubectl get pod
+```
+
+Outros comandos úteis
+
+```sh
+kubectl create deploy products --image=server/auth --dry-run -o yml > auth-definition.yml
+```
+
+## Kubernates
+
+### Comandos úteis
+
+```sh
+# Entrar num container
+kubectl exec -it <container> -- /bin/sh
+# Criar configmap a partir do .env
+kubectl create configmap server-auth-env --from-env-file=src/infra/environment/.env
+# Ver configmap criado
+kubectl get configmap server-auth-env -o yaml
+# Editar configmap no editar padrão
+kubectl edit secrets server-auth-dev
+# Ver variáveis de ambiente dentro do container
+kubectl exec server-auth -- printenv
+```
+
+### Referências
+
+- https://humanitec.com/blog/handling-environment-variables-with-kubernetes
+
+---
+
+### Skaffold
+
+É um gerador de _pipeline_ de desenvolvimento contínuo com **Kubernates**. Ele gera um boilerplate para facilitar você
+fazer _deploys_ especificando qual ambiente gostaria tal como: local, homolog, production.
+
+- [Instalação](https://skaffold.dev/docs/install/#standalone-binary)
+
+---
+
+### Kind
+
+É uma solução para criação de _Cluster_ **Kubernates** baseado em **Docker**.
+
+- [Instalação](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-a-package-manager)
+
+---
+
+### Helm
+
+Gerenciador de pacotes para fazer _setup_ de aplicações no **Kubernates**.
+
+- [Instalação](https://helm.sh/)
+
+---
+
+### Kubectl
+
+Orquestração de _containers_.
+
+- [Instalação](https://kubernetes.io/docs/tasks/tools/#kubectl)
+
+---
+
+### Cloud Code
+
+Instale a extensão para trabalhar com as ferramentas de _Cloud_ do **Google**. Ele te ajuda a debugar no **Kubernates**
+e possui _intellisense_ para trabalhar com **Skaffold**.
+
+- [Extensão para vscode](https://github.com/GoogleCloudPlatform/cloud-code-vscode)
