@@ -2,15 +2,15 @@ version: '3'
 
 services:
   auth:
-    build: ../../../../
-    # restart: unless-stopped
+    build: ../packages/auth
+    restart: unless-stopped
     command: yarn dev
     ports:
       - '3001:3001'
     volumes:
-      - ../../../../:/home/node/app
+      - ../packages/auth:/home/node/app
     env_file:
-      - ../../environment/.env
+      - ../packages/auth/src/infra/environment/.env
     networks:
       - net
       - pgadmin

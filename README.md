@@ -10,14 +10,33 @@ A ideia de criar um projeto que se tornará grande com tempo com vários `packag
 Cada _package_ será um _Microservice_ com possibilidade do mundo se conectar via REST, Mensageria (básico) e outros
 conforme for possível/priorizada implementação (GraphQL, gRPC, Kafka, HabbitMQ, SQS, SNS e etc).
 
+Projeto a estrutura do projeto, pense que cada `packages/<package>` é um _git submodule_. Tanto que é possível
+rodar cada um via `docker` ou `skaffold` separadamente mas também todos de uma vez. Note os arquivos `Makefile`.
+
 ## Execução
 
-Por enquanto tem apenas um formato como abaixo, mas será possível via `docker-compose` e `kubectl` (Kubernates) com
-_reverse proxy_ com _Traefik_.
+É possível rodar o projeto via comandos presentes nos `Makefile`. Seja via arquivo presente no _root_ ou de cada projeto.
+
+O _Makefile_ do _root_ levanta todos de uma vez. O presente em cada _package_ permite levantar um de cada vez.
+
+[ ] A implementar: _reverse proxy_ com _Traefik_.
+
+Segue os principais comandos presente em qualquer `Makefile`:
 
 ```bash
+# Necessário na primeira vez
 make bootstrap
-# make dev
+# Via docker em especial na primeira vez
+make docker_init
+make docker_build
+make docker_dev
+make docker_stop
+# Via kubernates em especial na primeira vez
+make k8s_init
+make k8s_build
+make k8s_dev
+make k8s_stop
+make k8s_run # build e deploy (não necessário quando local)
 ```
 
 ## Testes
@@ -226,9 +245,41 @@ kubectl edit secrets server-auth-dev
 kubectl exec server-auth -- printenv
 ```
 
+### Dashboard
+
+Para ter o Dashboard do **Kubernates** faça o seguinte:
+
+```sh
+# Configurar dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+# Ver se kubernetes-dashboard está presente
+kubectl get ns
+# Ver se está rodando
+kubectl -n kubernetes-dashboard get pods -o wide
+# Ver outros dados como ip e porta
+kubectl -n kubernetes-dashboard get svc
+# Altere no final "type: ClusterIP" para "type: LoadBalancer"
+kubectl -n kubernetes-dashboard edit svc kubernetes-dashboard
+# Caso queira obter informacões do cluster
+kubectl cluster-info
+# Criar um proxy entre sua máquina e servidor de API do Kubernates
+kubectl proxy
+# Acessar a rota abaixo
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
+# Pegar token para incluir na rota selecionando Token
+kubectl -n kubernetes-dashboard create token admin-user
+# Para acessos futuros pode acessar via link abaixo
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default
+# Se quiser alterar a porta (não recomendo fazer isso local)
+kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8080:443
+```
+
 ### Referências
 
-- https://humanitec.com/blog/handling-environment-variables-with-kubernetes
+- [Handling environment variables with Kubernetes](https://humanitec.com/blog/handling-environment-variables-with-kubernetes)
+- [StackOverflow - k8s persist volume](https://stackoverflow.com/a/62581280)
+- [Kubernetes Dashboard Setup - Deploy Applications using Web UI](https://youtu.be/CICS57XbS9A?t=153)
+- [Criar um primeiro usuário para Dashboard do Kubernates](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md)
 
 ---
 

@@ -1,0 +1,23 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: server-auth
+build:
+  artifacts:
+    - image: jefferson-william/server-auth
+      context: packages/auth
+      docker:
+        dockerfile: packages/auth/Dockerfile
+      sync:
+        infer:
+          - 'src/**/*'
+deploy:
+  kubectl:
+    manifests:
+      - k8s/*.yml
+      - packages/**/src/infra/container/k8s/*.yml
+portForward:
+  - resourceType: service
+    resourceName: server-auth
+    port: 3001
+    localPort: 3001

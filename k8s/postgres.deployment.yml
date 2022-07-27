@@ -1,0 +1,76 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: server-postgres
+  labels:
+    app: server-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-postgres
+  template:
+    metadata:
+      labels:
+        app: server-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: 'postgres:14.4-alpine'
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: server-env
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: server-data
+      volumes:
+        - name: server-data
+          persistentVolumeClaim:
+            claimName: server-postgres-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: server-postgres
+  name: server-postgres
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: server-postgres
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: server-postgres-volume
+  labels:
+    app: postgres
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /var/lib/data
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: server-postgres-claim
+  labels:
+    app: postgres
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+

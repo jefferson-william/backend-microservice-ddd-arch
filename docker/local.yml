@@ -9,7 +9,7 @@ services:
     volumes:
       - 'postgresql_data:/var/lib/postgresql'
     env_file:
-      - ../../environment/.env
+      - .env
     networks:
       - net
       - pgadmin
@@ -18,7 +18,7 @@ services:
     image: dpage/pgadmin4
     restart: unless-stopped
     env_file:
-      - ../../environment/.env
+      - .env
     ports:
       - '16543:80'
     depends_on:
@@ -37,7 +37,7 @@ services:
     volumes:
       - 'zookeeper_data:/bitnami'
     env_file:
-      - ../../environment/.env
+      - .env
     networks:
       - net
     depends_on:
@@ -51,7 +51,7 @@ services:
     volumes:
       - 'kafka_data:/bitnami'
     env_file:
-      - ../../environment/.env
+      - .env
     depends_on:
       - postgres
       - zookeeper
