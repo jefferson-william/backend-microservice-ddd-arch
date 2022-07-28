@@ -25,6 +25,15 @@ spec:
           volumeMounts:
             - name: server-auth-config
               mountPath: /app/config
+        # - name: server-auth-migrations
+        #   image: jefferson-william/server-auth:latest
+        #   command: ['yarn migration']
+        #   envFrom:
+        #     - configMapRef:
+        #         name: server-auth-env
+        #   volumeMounts:
+        #     - name: server-auth-config
+        #       mountPath: /app/config
       volumes:
         - name: server-auth-config
           configMap:
@@ -40,5 +49,4 @@ spec:
   ports:
     - port: 3001
       targetPort: 3001
-      nodePort: 30001
   type: LoadBalancer

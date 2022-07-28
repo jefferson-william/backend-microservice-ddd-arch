@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node dist/presentation/index.js",
     "dev": "NODE_ENV=development tsnd --respawn -r tsconfig-paths/register src/presentation/index.ts",
-    "build": "rimraf dist && tsc -p ./tsconfig.json",
+    "build": "rimraf dist && cp -r src dist && tsc -p ./tsconfig.json",
     "lint": "echo 1",
     "jest": "jest",
     "unit": "NODE_ENV=test jest --config jest.unit.js",

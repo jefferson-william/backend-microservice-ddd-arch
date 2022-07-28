@@ -15,10 +15,8 @@ spec:
         app: server-mongo
     spec:
       containers:
-        - name: mongo
+        - name: server-mongo
           image: 'mongo:5.0.9'
-          ports:
-            - containerPort: 27017
 ---
 apiVersion: v1
 kind: Service
@@ -27,8 +25,9 @@ metadata:
     app: server-mongo
   name: server-mongo
 spec:
-  ports:
-    - port: 27017
-      targetPort: 27017
   selector:
     app: server-mongo
+  ports:
+    - port: 27017
+      nodePort: 30017
+  type: NodePort

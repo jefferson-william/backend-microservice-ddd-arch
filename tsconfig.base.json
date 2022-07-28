@@ -16,7 +16,7 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
@@ -30,6 +30,6 @@
     "resolveJsonModule": true,
     "isolatedModules": false
   },
-  "include": ["src/**/*.ts"],
+  "include": [],
   "exclude": ["**/node_modules", "**/dist", "**/build", "**/test", "**/.git", "**/__mocks__/"]
 }

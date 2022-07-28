@@ -15,18 +15,16 @@ spec:
         app: server-postgres
     spec:
       containers:
-        - name: postgres
+        - name: server-postgres
           image: 'postgres:14.4-alpine'
-          ports:
-            - containerPort: 5432
           envFrom:
             - configMapRef:
                 name: server-env
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: server-data
+              name: server-postgres-data
       volumes:
-        - name: server-data
+        - name: server-postgres-data
           persistentVolumeClaim:
             claimName: server-postgres-claim
 ---
@@ -37,11 +35,12 @@ metadata:
     app: server-postgres
   name: server-postgres
 spec:
-  ports:
-    - port: 5432
-      targetPort: 5432
   selector:
     app: server-postgres
+  ports:
+    - port: 5432
+      nodePort: 30432
+  type: NodePort
 ---
 kind: PersistentVolume
 apiVersion: v1

@@ -233,16 +233,24 @@ kubectl create deploy products --image=server/auth --dry-run -o yml > auth-defin
 ### Comandos úteis
 
 ```sh
+# Ver os containers e seus nomes
+kubectl get pods
 # Entrar num container
-kubectl exec -it <container> -- /bin/sh
+kubectl exec -it <container> -- sh
 # Criar configmap a partir do .env
 kubectl create configmap server-auth-env --from-env-file=src/infra/environment/.env
 # Ver configmap criado
 kubectl get configmap server-auth-env -o yaml
 # Editar configmap no editar padrão
-kubectl edit secrets server-auth-dev
+kubectl edit secrets <container>
 # Ver variáveis de ambiente dentro do container
-kubectl exec server-auth -- printenv
+kubectl exec <container> -- printenv
+# Para ver os logs
+kubectl logs <container>
+# Para ver os volumes persistidos
+kubectl get pv
+# Para ver os volumes
+kubectl get pvc
 ```
 
 ### Dashboard
@@ -270,8 +278,26 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 kubectl -n kubernetes-dashboard create token admin-user
 # Para acessos futuros pode acessar via link abaixo
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default
-# Se quiser alterar a porta (não recomendo fazer isso local)
+# Se quiser alterar a porta (não recomendo)
 kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8080:443
+```
+
+### Postgres
+
+Comandos úteis sobre **Postgres** com **Kubernates**.
+
+```sh
+# Ver os containers para achar o nome do container postgres
+kubectl get pods
+# Entrar no bash do container do postgres
+kubectl exec -it <container> -- sh
+# Dentro do container rode para acessar o postgres
+psql -U postgres -p 5432
+# Ou
+kubectl exec -it <container> -- psql -U postgres -p 5432
+# Exemplo de comando postgres para ver os databases
+# Mais comandos: https://postgrescheatsheet.com
+\l
 ```
 
 ### Referências

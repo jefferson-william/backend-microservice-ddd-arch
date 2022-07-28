@@ -51,20 +51,17 @@ k8s_init: k8s_env
 	@kind create cluster
 
 k8s_env:
-	@kubectl delete configmap server
+	@kubectl delete configmap server-env
 	@kubectl delete configmap server-auth-env
 	@sleep 5
 	@kubectl create configmap server-env --from-env-file=docker/.env
 	@kubectl create configmap server-auth-env --from-env-file=packages/auth/src/infra/environment/.env
 
 k8s_dev:
-	@skaffold dev
+	@skaffold dev --port-forward
 
 k8s_debug:
-	@skaffold \
-		-f k8s/deployment.yml \
-		-f packages/auth/skaffold.yml \
-		debug
+	@skaffold debug --port-forward
 
 k8s_stop:
 	@skaffold delete

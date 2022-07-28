@@ -16,8 +16,3 @@ deploy:
     manifests:
       - k8s/*.yml
       - packages/**/src/infra/container/k8s/*.yml
-portForward:
-  - resourceType: service
-    resourceName: server-auth
-    port: 3001
-    localPort: 3001

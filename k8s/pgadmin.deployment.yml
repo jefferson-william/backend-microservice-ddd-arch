@@ -1,0 +1,36 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: server-pgadmin
+  labels:
+    app: server-pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-pgadmin
+  template:
+    metadata:
+      labels:
+        app: server-pgadmin
+    spec:
+      containers:
+        - name: server-pgadmin
+          image: 'dpage/pgadmin4'
+          envFrom:
+            - configMapRef:
+                name: server-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: server-pgadmin
+  name: server-pgadmin
+spec:
+  selector:
+    app: server-pgadmin
+  ports:
+    - port: 80
+      nodePort: 30543
+  type: NodePort
