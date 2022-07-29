@@ -3,21 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "start": "yarn dev",
-    "dev": "yarn workspaces run dev",
-    "build": "yarn workspaces run build",
-    "lint": "echo 1",
-    "types": "tsc -p tsconfig.json --noEmit",
-    "commit": "cz",
-    "unit": "CI=true yarn workspaces run unit",
-    "integration": "CI=true yarn workspaces run integration",
-    "api": "CI=true yarn workspaces run api",
-    "test": "yarn unit && yarn integration && yarn api",
-    "coverage": "CI=true yarn workspaces run coverage",
-    "env": "CI=true yarn workspaces run env",
-    "up": "yarn workspaces run up",
-    "pull": "yarn workspaces run pull",
-    "bootstrap": "yarn workspaces run bootstrap"
+    "commit": "cz"
   },
   "dependencies": {
     "rimraf": "3.0.2"

@@ -13,13 +13,28 @@ conforme for possível/priorizada implementação (GraphQL, gRPC, Kafka, HabbitM
 Projeto a estrutura do projeto, pense que cada `packages/<package>` é um _git submodule_. Tanto que é possível
 rodar cada um via `docker` ou `skaffold` separadamente mas também todos de uma vez. Note os arquivos `Makefile`.
 
+# Instalações necessárias
+
+Neste projeto terá como formas de execução via **Docker**, **Kubernetes** e **_yarn_** pode ser **Node**. Instale-os para continuar.
+
+## Instalação do Docker e Compose
+
+Instale-os caso queira rodar o projeto via `make docker_dev` e outros comandos disponíveis nos `Makefile`.
+
+- https://docs.docker.com/engine/install/ubuntu/
+- https://docs.docker.com/compose/install/
+
+## Instalação do Kubernetes
+
+Instale-o caso queira rodar o projeto via `make k8s_dev` e outros comandos disponíveis nos `Makefile`.
+
 ## Execução
 
-É possível rodar o projeto via comandos presentes nos `Makefile`. Seja via arquivo presente no _root_ ou de cada projeto.
+É possível rodar o projeto via comandos presentes nos `Makefile`. Seja via arquivo presente no _root_ ou de cada _package_.
 
 O _Makefile_ do _root_ levanta todos de uma vez. O presente em cada _package_ permite levantar um de cada vez.
 
-[ ] A implementar: _reverse proxy_ com _Traefik_.
+- [ ] A implementar: _reverse proxy_ com _Traefik_.
 
 Segue os principais comandos presente em qualquer `Makefile`:
 
@@ -31,7 +46,7 @@ make docker_init
 make docker_build
 make docker_dev
 make docker_stop
-# Via kubernates em especial na primeira vez
+# Via kubernetes em especial na primeira vez
 make k8s_init
 make k8s_build
 make k8s_dev
@@ -99,25 +114,25 @@ Uma estrutura de pasta comum que encontrei e que mais tem funcionado em disparad
 |   ├── unit/          testes unitários exemplo os de domínio
 ```
 
-## Clean Architecture com DDD
+## Clean Architecture e Onion Architecture com DDD
 
-Basicamente será utilizado os conceitos mais básicos dele tais como:
+Basicamente será utilizado os conceitos mais importantes do _Clean Archicture_ tais como:
 
 - _Layers_;
 - _couplings_;
 - _Boundary context_;
 - _Dependency rules_.
 
-### Camadas e Dependency rules
+### Camadas, Dependency rules e Onion Architecture
 
-Como este possui as camadas abaixo:
+Como _Clean Architecture_ possui as camadas abaixo:
 
 - _Frameworks & Drivers_ `>`
 - _Interface Adapters_ `>`
 - _Application Business Rules_ `>`
 - _Enterprise Business Rules_
 
-Ao misturar com DDD e para uma excelente estrutura, teremos:
+Ao misturar com **DDD** e Onion **_Architecture_** fica uma excelente estrutura tal como:
 
 - _Presentation_ `>`
 - _Infra_ `>`
@@ -146,7 +161,7 @@ Esses arquivos possuem implementações da camada de `infra` e para não acoplar
 
 ### Repository & Aggregates & CQRS
 
-_Repository_ do DDD é o meio de aplicar _Aggregates_. É possível ter _Aggregate_ de 1 _Repository_ ou até mais.
+_Repository_ do DDD é o meio de aplicar _Aggregates_. É possível ter _Aggregate_ de 1 _Repository_ e sobre uma tabela ou até mais.
 
 Outro exemplo que _Aggregates_ podem acabar tendo 1 _Repository_ que nele tem uma _query_ como abaixo que trás dados de
 outras tabelas.
@@ -195,11 +210,18 @@ Quando perceber que o _usecase_ está fazendo algo que não é dele e que poderi
 
 ## i18n
 
+Foi aplicado no projeto `pt-BR` como padrão, mas é possível via _header_, _cookie_ e na routa alterar a linguagem de tradução tal como `en`. Veja:
+
+Exemplo via rota: `?lng=en`.
+
 - https://i18next.github.io/i18next/node/pages/doc_express.html
 
 # Container
 
-Nesse projeto estarei usando **Kubernates** para desenvolver e _deploys_ via algumas das ferramentas abaixo. Instale para usar.
+Nesse projeto estarei usando **Kubernetes** e **Docker** para desenvolver e _deploys_ via algumas das ferramentas. Instale-as para usar, sendo:
+
+- [Kubernetes](#kubernetes)
+- []
 
 ## Execução
 
@@ -218,7 +240,7 @@ skaffold delete # Deletar o que foi executado na pipeline inicial
 skaffold run --port-forward # Irá reconstruir a imagem exportando as portas dos containers para máquina local
 skaffold dev --port-forward # Rodar em modo desenvolvimento para exibição dos logs
 skaffold debug --port-forward # Rodar em modo desenvolvimento com debug
-helm list # Se o Kubernates executar com Helm este comando irá listar aquilo que ele está trabalhando
+helm list # Se o Kubernetes executar com Helm este comando irá listar aquilo que ele está trabalhando
 kubectl describe pod <container> # Pegue o nome do container em execução via kubectl get pod
 ```
 
@@ -228,7 +250,24 @@ Outros comandos úteis
 kubectl create deploy products --image=server/auth --dry-run -o yml > auth-definition.yml
 ```
 
-## Kubernates
+## Execução via Docker e Compose e ferramentas
+
+Instale-os caso queira rodar o projeto via `make docker_dev` e outros comandos disponíveis no `Makefile`.
+
+- https://docs.docker.com/engine/install/ubuntu/
+- https://docs.docker.com/compose/install/
+
+## Execução via Kubernetes e ferramentas
+
+Tem alguns comandos pré disponíveis nos `Makefile` do _root_ ou projeto.
+
+```sh
+make bootstrap
+make k8s_init
+make k8s_dev # ou k8s_debug
+make k8s_run # apenas para deploy (não rodar local)
+make k8s_stop # ele deleta os containers mas é assim mesmo que skaffold funciona
+```
 
 ### Comandos úteis
 
@@ -260,7 +299,7 @@ netstat -ln
 ### Mais informações sobre volumes
 
 ```sh
-# Para ter mais informações
+# Para ter mais informações sobre os volumes configurados nos arquivos k8s/*.yml e etc
 kubectl describe pvc server-pgadmin-claim
 kubectl get pvc
 kubectl describe pv pvc-<uuid>
@@ -274,7 +313,7 @@ kubectl scale deployment/server-auth --replicas=2;
 
 ### Dashboard
 
-Para ter o Dashboard do **Kubernates** faça o seguinte:
+Para ter o Dashboard do **Kubernetes** faça o seguinte:
 
 ```sh
 # Configurar dashboard
@@ -289,7 +328,7 @@ kubectl -n kubernetes-dashboard get svc
 kubectl -n kubernetes-dashboard edit svc kubernetes-dashboard
 # Caso queira obter informacões do cluster
 kubectl cluster-info
-# Criar um proxy entre sua máquina e servidor de API do Kubernates
+# Criar um proxy entre sua máquina e servidor de API do Kubernetes
 kubectl proxy
 # Acessar a rota abaixo
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
@@ -303,7 +342,7 @@ kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8080:4
 
 ### Postgres
 
-Comandos úteis sobre **Postgres** com **Kubernates**.
+Comandos úteis sobre **Postgres** com **Kubernetes**.
 
 ```sh
 # Ver os containers para achar o nome do container postgres
@@ -324,13 +363,13 @@ kubectl exec -it <container> -- psql -U postgres -p 5432
 - [Handling environment variables with Kubernetes](https://humanitec.com/blog/handling-environment-variables-with-kubernetes)
 - [StackOverflow - k8s persist volume](https://stackoverflow.com/a/62581280)
 - [Kubernetes Dashboard Setup - Deploy Applications using Web UI](https://youtu.be/CICS57XbS9A?t=153)
-- [Criar um primeiro usuário para Dashboard do Kubernates](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md)
+- [Criar um primeiro usuário para Dashboard do Kubernetes](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md)
 
 ---
 
 ### Skaffold
 
-É um gerador de _pipeline_ de desenvolvimento contínuo com **Kubernates**. Ele gera um boilerplate para facilitar você
+É um gerador de _pipeline_ de desenvolvimento contínuo com **Kubernetes**. Ele gera um boilerplate para facilitar você
 fazer _deploys_ especificando qual ambiente gostaria tal como: local, homolog, production.
 
 - [Instalação](https://skaffold.dev/docs/install/#standalone-binary)
@@ -339,7 +378,7 @@ fazer _deploys_ especificando qual ambiente gostaria tal como: local, homolog, p
 
 ### Kind
 
-É uma solução para criação de _Cluster_ **Kubernates** baseado em **Docker**.
+É uma solução para criação de _Cluster_ **Kubernetes** baseado em **Docker**.
 
 - [Instalação](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-a-package-manager)
 
@@ -347,7 +386,7 @@ fazer _deploys_ especificando qual ambiente gostaria tal como: local, homolog, p
 
 ### Helm
 
-Gerenciador de pacotes para fazer _setup_ de aplicações no **Kubernates**.
+Gerenciador de pacotes para fazer _setup_ de aplicações no **Kubernetes**.
 
 - [Instalação](https://helm.sh/)
 
@@ -363,7 +402,7 @@ Orquestração de _containers_.
 
 ### Cloud Code
 
-Instale a extensão para trabalhar com as ferramentas de _Cloud_ do **Google**. Ele te ajuda a debugar no **Kubernates**
+Instale a extensão para trabalhar com as ferramentas de _Cloud_ do **Google**. Ele te ajuda a debugar no **Kubernetes**
 e possui _intellisense_ para trabalhar com **Skaffold**.
 
 - [Extensão para vscode](https://github.com/GoogleCloudPlatform/cloud-code-vscode)

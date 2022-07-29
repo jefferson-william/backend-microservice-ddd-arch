@@ -1,6 +1,6 @@
 .EXPORT_ALL_VARIABLES:
 
-bootstrap: env init k8s_env_create
+bootstrap: env
 
 env:
 	cp docker/.env.example docker/.env
@@ -13,7 +13,6 @@ pull:
 	yarn pull
 
 init: pull
-	yarn install
 
 dev:
 	yarn dev
@@ -47,7 +46,7 @@ docker_stop:
 		-f docker/base.yml \
 		stop
 
-k8s_init: k8s_env
+k8s_init: k8s_env_create
 	@kind create cluster
 
 k8s_env:
@@ -59,6 +58,9 @@ k8s_env:
 k8s_env_create:
 	@kubectl create configmap server-env --from-env-file=docker/.env
 	@kubectl create configmap server-auth-env --from-env-file=packages/auth/src/infra/environment/.env
+
+k8s_run:
+	@skaffold run
 
 k8s_dev:
 	@skaffold dev

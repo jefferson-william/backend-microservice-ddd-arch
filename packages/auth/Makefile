@@ -38,7 +38,7 @@ docker_stop:
 		-f src/infra/container/docker/base.yml \
 		stop
 
-k8s_init: k8s_env
+k8s_init: k8s_env_create
 	@kind create cluster
 
 k8s_env:
@@ -47,15 +47,16 @@ k8s_env:
 	@make k8s_env_create
 
 k8s_env_create:
-	@kubectl create configmap server-auth-env --from-env-file=packages/auth/src/infra/environment/.env
+	@kubectl create configmap server-auth-env --from-env-file=src/infra/environment/.env
 
 k8s_run:
-	@skaffold -f src/infra/container/k8s/skaffold.yml run
+	@skaffold run
 
 k8s_dev:
-	@skaffold \
-		-f src/infra/container/k8s/skaffold.yml \
-		dev
+	@skaffold dev
+
+k8s_debug:
+	@skaffold debug
 
 k8s_stop:
-	@skaffold -f src/infra/container/k8s/skaffold.yml delete
+	@skaffold delete
