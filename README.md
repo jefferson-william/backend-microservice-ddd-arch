@@ -28,6 +28,30 @@ Instale-os caso queira rodar o projeto via `make docker_dev` e outros comandos d
 
 Instale-o caso queira rodar o projeto via `make k8s_dev` e outros comandos disponíveis nos `Makefile`.
 
+### Instalação do K8S no Linux
+
+```sh
+# Instalação para Linux
+cd /usr/local/bin
+sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+sudo chmod +x /usr/local/bin/kubectl
+kubectl version --output=yaml
+```
+
+### Instalação do Skaffold no Linux
+
+```sh
+cd ~
+curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+sudo install skaffold /usr/local/bin/
+```
+
+### Referências
+
+- [Instale kubectl e kind pelo site oficial](https://kubernetes.io/docs/tasks/tools/)
+- [Instale o Skaffold pelo site oficial](https://skaffold.dev/docs/install/#standalone-binary)
+
 ## Execução
 
 É possível rodar o projeto via comandos presentes nos `Makefile`. Seja via arquivo presente no _root_ ou de cada _package_.
