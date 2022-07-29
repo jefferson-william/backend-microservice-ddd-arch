@@ -19,6 +19,8 @@ spec:
       containers:
         - name: server-auth
           image: jefferson-william/server-auth:latest
+          ports:
+            - containerPort: 3001
           envFrom:
             - configMapRef:
                 name: server-auth-env

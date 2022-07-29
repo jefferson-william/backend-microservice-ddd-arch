@@ -251,6 +251,25 @@ kubectl logs <container>
 kubectl get pv
 # Para ver os volumes
 kubectl get pvc
+# Ver o IP e Port em que os containers estão rodando
+kubectl get endpoints
+# Estando dentro do container conseguirá ver o ip interno e porta em execução
+netstat -ln
+```
+
+### Mais informações sobre volumes
+
+```sh
+# Para ter mais informações
+kubectl describe pvc server-pgadmin-claim
+kubectl get pvc
+kubectl describe pv pvc-<uuid>
+```
+
+### Scale
+
+```sh
+kubectl scale deployment/server-auth --replicas=2;
 ```
 
 ### Dashboard

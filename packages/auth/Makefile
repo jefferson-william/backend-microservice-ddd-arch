@@ -1,6 +1,6 @@
 .EXPORT_ALL_VARIABLES:
 
-bootstrap: env init
+bootstrap: env init k8s_env_create
 
 env:
 	cp src/infra/environment/.env.example src/infra/environment/.env
@@ -43,7 +43,10 @@ k8s_init: k8s_env
 
 k8s_env:
 	@kubectl delete configmap server-auth-env
-	@sleep 5
+	@sleep 2
+	@make k8s_env_create
+
+k8s_env_create:
 	@kubectl create configmap server-auth-env --from-env-file=packages/auth/src/infra/environment/.env
 
 k8s_run:

@@ -1,6 +1,6 @@
 .EXPORT_ALL_VARIABLES:
 
-bootstrap: env init dev
+bootstrap: env init k8s_env_create
 
 env:
 	cp docker/.env.example docker/.env
@@ -53,15 +53,18 @@ k8s_init: k8s_env
 k8s_env:
 	@kubectl delete configmap server-env
 	@kubectl delete configmap server-auth-env
-	@sleep 5
+	@sleep 2
+	@make k8s_env_create
+
+k8s_env_create:
 	@kubectl create configmap server-env --from-env-file=docker/.env
 	@kubectl create configmap server-auth-env --from-env-file=packages/auth/src/infra/environment/.env
 
 k8s_dev:
-	@skaffold dev --port-forward
+	@skaffold dev
 
 k8s_debug:
-	@skaffold debug --port-forward
+	@skaffold debug
 
 k8s_stop:
 	@skaffold delete
