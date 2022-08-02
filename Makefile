@@ -42,6 +42,7 @@ k8s_init:
 	@kind create cluster
 	sleep 2
 	@make k8s_env_create
+	@make k8s_dashboard
 
 k8s_env:
 	@make k8s_env_delete
@@ -67,3 +68,6 @@ k8s_debug:
 
 k8s_stop:
 	@skaffold delete
+
+k8s_dashboard:
+	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
