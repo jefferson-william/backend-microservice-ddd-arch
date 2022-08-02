@@ -47,10 +47,20 @@ curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffo
 sudo install skaffold /usr/local/bin/
 ```
 
+### Instalação do Kind no Linux
+
+```sh
+cd ~
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.14.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+```
+
 ### Referências
 
 - [Instale kubectl e kind pelo site oficial](https://kubernetes.io/docs/tasks/tools/)
 - [Instale o Skaffold pelo site oficial](https://skaffold.dev/docs/install/#standalone-binary)
+- [Instale o kind no pelo site oficial](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-from-release-binaries)
 
 ## Execução
 
