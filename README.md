@@ -75,17 +75,22 @@ Segue os principais comandos presente em qualquer `Makefile`:
 ```bash
 # Necessário na primeira vez
 make bootstrap
-# Via docker em especial na primeira vez
-make docker_init
+# Via docker
 make docker_build
 make docker_dev
 make docker_stop
-# Via kubernetes em especial na primeira vez
-make k8s_init
-make k8s_build
+# Via kubernetes
 make k8s_dev
+make k8s_debug
 make k8s_stop
 make k8s_run # build e deploy (não necessário quando local)
+```
+
+Para testar tudo tem por exemplo esses links e portas abaixo.
+
+```sh
+curl http://localhost:3001/health # Aplicação auth básica
+curl http://localhost:30543 # pgadmin no docker funciona mas no k8s não salva nada
 ```
 
 ## Testes

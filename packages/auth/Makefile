@@ -1,17 +1,17 @@
 .EXPORT_ALL_VARIABLES:
 
-bootstrap: env init k8s_env_create
+bootstrap: env init
 
 env:
 	cp src/infra/environment/.env.example src/infra/environment/.env
 
-init:
-	yarn install
-	make docker_init
-	make k8s_init
+init: docker_init k8s_init
 
-start:
-	yarn start
+dev: docker_dev
+
+build: docker_build
+
+start: dev
 
 kill:
 	make docker_stop
@@ -45,6 +45,9 @@ k8s_env:
 	@kubectl delete configmap server-auth-env
 	@sleep 2
 	@make k8s_env_create
+
+k8s_env_delete:
+	@kubectl delete configmap server-auth-env
 
 k8s_env_create:
 	@kubectl create configmap server-auth-env --from-env-file=src/infra/environment/.env

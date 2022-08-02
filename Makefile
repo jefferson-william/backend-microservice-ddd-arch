@@ -1,24 +1,16 @@
 .EXPORT_ALL_VARIABLES:
 
-bootstrap: env
+bootstrap: env init
 
 env:
 	cp docker/.env.example docker/.env
 	cp packages/auth/src/infra/environment/.env.example packages/auth/src/infra/environment/.env
 
-up:
-	yarn up
+init: docker_init k8s_init
 
-pull:
-	yarn pull
+dev: docker_dev
 
-init: pull
-
-dev:
-	yarn dev
-
-build:
-	yarn build
+build: docker_build
 
 start: dev
 
@@ -46,14 +38,19 @@ docker_stop:
 		-f docker/base.yml \
 		stop
 
-k8s_init: k8s_env_create
+k8s_init:
 	@kind create cluster
+	sleep 2
+	@make k8s_env_create
 
 k8s_env:
-	@kubectl delete configmap server-env
-	@kubectl delete configmap server-auth-env
+	@make k8s_env_delete
 	@sleep 2
 	@make k8s_env_create
+
+k8s_env_delete:
+	@kubectl delete configmap server-env
+	@kubectl delete configmap server-auth-env
 
 k8s_env_create:
 	@kubectl create configmap server-env --from-env-file=docker/.env
