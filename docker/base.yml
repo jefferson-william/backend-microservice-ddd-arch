@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  auth:
+  server-auth:
     build: ../packages/auth
     restart: unless-stopped
     command: yarn dev
