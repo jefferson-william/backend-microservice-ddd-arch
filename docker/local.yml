@@ -1,35 +1,34 @@
 version: '3'
 
 services:
-  postgres:
+  server-postgres:
     image: 'postgres:14.4-alpine'
     restart: unless-stopped
     ports:
       - '5432:5432'
     volumes:
       - postgresql_data:/var/lib/postgresql
-      - ./pgdata:/var/lib/postgresql/data
     env_file:
       - .env
     networks:
       - net
       - pgadmin
 
-  pgadmin:
+  server-pgadmin:
     image: dpage/pgadmin4
     restart: unless-stopped
     env_file:
       - .env
     ports:
-      - '16543:80'
+      - '30543:80'
     depends_on:
-      - postgres
+      - server-postgres
     networks:
       - pgadmin
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
-  zookeeper:
+  server-zookeeper:
     image: 'bitnami/zookeeper:3'
     restart: unless-stopped
     ports:
@@ -42,9 +41,9 @@ services:
     networks:
       - net
     depends_on:
-      - postgres
+      - server-postgres
 
-  kafka:
+  server-kafka:
     image: 'bitnami/kafka:3'
     restart: unless-stopped
     ports:
@@ -54,8 +53,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres
-      - zookeeper
+      - server-postgres
+      - server-zookeeper
     networks:
       - net
 

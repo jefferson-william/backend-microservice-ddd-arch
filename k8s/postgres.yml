@@ -25,13 +25,6 @@ spec:
           volumeMounts:
             - name: server-postgres-volume
               mountPath: /var/lib/postgresql/data
-      # initContainers:
-      #   - name: wait-for-server-postgres
-      #     image: image-docker-containing-sh
-      #     args:
-      #       - /bin/sh
-      #       - -c
-      #       - /usr/app/wait-for-it.sh server-postgres:5432 -t 0
       volumes:
         - name: server-postgres-volume
           persistentVolumeClaim:
