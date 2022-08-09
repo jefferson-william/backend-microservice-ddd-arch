@@ -77,20 +77,23 @@ Segue os principais comandos presente em qualquer `Makefile`:
 make bootstrap
 # Via docker
 make docker_build
-make docker_dev
+make docker_dev # vai ser necessário criar os databases manualmente, pausar e rodar novamente
 make docker_stop
 # Via kubernetes
-make k8s_dev
-make k8s_debug
-make k8s_stop
-make k8s_run # build e deploy (não necessário quando local)
+make k8s_init
+make k8s_common_dev # sempre deve ser rodado num terminal paralelo
+make k8s_database_create # criar os databases para rodar as migrações
+make k8s_dev # ou k8s_debug deve ser rodado em outro terminal
+make k8s_stop # ele deleta os containers mas é assim mesmo que skaffold funciona
+make k8s_run # apenas para deploy (não rodar local)
+make k8s_env # se alterar algum .env precisa rodar esse comando para atualizar
 ```
 
 Para testar tudo tem por exemplo esses links e portas abaixo.
 
 ```sh
 curl http://localhost:3001/health # Aplicação auth básica
-curl http://localhost:30543 # pgadmin no docker funciona mas no k8s não salva nada
+curl http://localhost:16543 # pgadmin
 ```
 
 ## Testes
@@ -260,11 +263,10 @@ Exemplo via rota: `?lng=en`.
 Nesse projeto estarei usando **Kubernetes** e **Docker** para desenvolver e _deploys_ via algumas das ferramentas. Instale-as para usar, sendo:
 
 - [Kubernetes](#kubernetes)
-- []
 
-## Execução
+## Estudos
 
-Após as instalações abaixo, rode:
+Após as instalações e caso esteja estudando **K8S** e **Skaffold**, muito provavelmente você passará pelos comandos abaixo.
 
 ```sh
 kind create cluster # Primeiro levante o cluster do kind para skaffold fazer push da imagem do máquina local
@@ -303,9 +305,12 @@ Tem alguns comandos pré disponíveis nos `Makefile` do _root_ ou projeto.
 ```sh
 make bootstrap
 make k8s_init
-make k8s_dev # ou k8s_debug
+make k8s_common_dev # sempre deve ser rodado num terminal
+make k8s_database_create # criar os databases para rodar as migrações
+make k8s_dev # ou k8s_debug deve ser rodado em outro terminal
 make k8s_run # apenas para deploy (não rodar local)
 make k8s_stop # ele deleta os containers mas é assim mesmo que skaffold funciona
+make k8s_env # se alterar algum .env precisa rodar esse comando para atualizar
 ```
 
 ### Comandos úteis
@@ -387,14 +392,18 @@ Comandos úteis sobre **Postgres** com **Kubernetes**.
 # Ver os containers para achar o nome do container postgres
 kubectl get pods
 # Entrar no bash do container do postgres
-kubectl exec -it <container> -- sh
+kubectl exec -it deployment/server-postgres -- sh
 # Dentro do container rode para acessar o postgres
-psql -U postgres -p 5432
+psql
 # Ou
-kubectl exec -it <container> -- psql -U postgres -p 5432
+kubectl exec -it deployment/server-postgres -- psql
+# Ou fora do container e caso tenha psql instalado na sua máquina
+psql -h localhost -p 5432 -U root -d <db>
 # Exemplo de comando postgres para ver os databases
 # Mais comandos: https://postgrescheatsheet.com
 \l
+# Entrar num database para rodar as queries
+\c auth
 ```
 
 ### Referências
@@ -403,6 +412,8 @@ kubectl exec -it <container> -- psql -U postgres -p 5432
 - [StackOverflow - k8s persist volume](https://stackoverflow.com/a/62581280)
 - [Kubernetes Dashboard Setup - Deploy Applications using Web UI](https://youtu.be/CICS57XbS9A?t=153)
 - [Criar um primeiro usuário para Dashboard do Kubernetes](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md)
+- [Tutorial de configuração do postgres no Kubernetes](https://adamtheautomator.com/postgres-to-kubernetes/)
+- [Hackear montagem do volume do pgadmin no Kubernetes](https://stackoverflow.com/a/64357035/4731097)
 
 ---
 

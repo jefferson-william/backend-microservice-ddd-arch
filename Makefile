@@ -57,17 +57,35 @@ k8s_env_create:
 	@kubectl create configmap server-env --from-env-file=docker/.env
 	@kubectl create configmap server-auth-env --from-env-file=packages/auth/src/infra/environment/.env
 
+k8s_common_run:
+	@skaffold -f k8s/skaffold/skaffold.common.yml run
+
+k8s_common_dev:
+	@skaffold -f k8s/skaffold/skaffold.common.yml dev --port-forward
+
+k8s_common_debug:
+	@skaffold -f k8s/skaffold/skaffold.common.yml debug --port-forward
+
+k8s_common_stop:
+	@skaffold -f k8s/skaffold/skaffold.common.yml delete
+
 k8s_run:
-	@skaffold run
+	@skaffold -f k8s/skaffold/skaffold.packages.yml run
 
 k8s_dev:
-	@skaffold dev
+	@skaffold -f k8s/skaffold/skaffold.packages.yml dev --port-forward
 
 k8s_debug:
-	@skaffold debug
+	@skaffold -f k8s/skaffold/skaffold.packages.yml debug --port-forward
 
-k8s_stop:
-	@skaffold delete
+k8s_build:
+	@skaffold -f k8s/skaffold/skaffold.packages.yml build
+
+k8s_stop: k8s_common_stop
+	@skaffold -f k8s/skaffold/skaffold.packages.yml delete
 
 k8s_dashboard:
 	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+
+k8s_database_create:
+	@kubectl exec -it deployment/server-postgres -- psql -c 'CREATE DATABASE auth WITH ENCODING UTF8;'

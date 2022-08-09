@@ -1,0 +1,8 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: server-common
+deploy:
+  kubectl:
+    manifests:
+      - k8s/common/*.yml

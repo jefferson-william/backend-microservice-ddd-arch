@@ -1,6 +1,6 @@
 const i18next = {
   t: (text: string) => {
-    return eval(`require('../../../locales/pt-br/translation.json').${text}`)
+    return eval(`require('../../../locales/pt-BR/translation.json').${text}`)
   },
   changeLanguage: () => new Promise(() => {}),
   use: () => {

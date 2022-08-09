@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: server-postgres
-          image: 'postgres:14.4-alpine'
+          image: postgres:14.4-alpine
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
           envFrom:
@@ -58,7 +59,7 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /var/lib/postgresql/data
+    path: /data/postgres
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -70,7 +71,6 @@ spec:
   storageClassName: manual
   accessModes:
     - ReadWriteMany
-  volumeMode: Filesystem
   resources:
     requests:
       storage: 5Gi
