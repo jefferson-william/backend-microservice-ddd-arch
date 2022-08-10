@@ -3,5 +3,5 @@
   "compilerOptions": {
     "sourceMap": true
   },
-  "include": ["**/*.ts", "**/test/api/*.ts"]
+  "include": ["**/src/**/*.ts", "**/src/**/test/api/*.ts"]
 }
