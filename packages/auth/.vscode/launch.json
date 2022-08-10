@@ -1,0 +1,89 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dev",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "args": ["dev"],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "sourceMaps": true
+    },
+    {
+      "name": "Api",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "args": ["api", "--watch", "--coverage", "--no-cache"],
+      "env": {
+        "DEBUG": "jest"
+      },
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "sourceMaps": true
+    },
+    {
+      "name": "Integration",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "args": ["integration", "--watch", "--coverage", "--no-cache"],
+      "env": {
+        "DEBUG": "jest"
+      },
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "sourceMaps": true
+    },
+    {
+      "name": "Unit",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "args": ["unit", "--watch", "--coverage", "--no-cache"],
+      "env": {
+        "DEBUG": "jest"
+      },
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "sourceMaps": true
+    },
+    {
+      "name": "Test",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "args": ["test", "--coverage", "--no-cache"],
+      "env": {
+        "DEBUG": "jest"
+      },
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "sourceMaps": true
+    },
+    {
+      "name": "Remote Dev",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "localRoot": "${workspaceFolder}/src",
+      "remoteRoot": "/app"
+    },
+    {
+      "name": "Kubernetes: Run/Debug",
+      "type": "cloudcode.kubernetes",
+      "request": "launch",
+      "skaffoldConfig": "${workspaceFolder}/skaffold.yml",
+      "watch": true,
+      "cleanUp": true,
+      "portForward": true
+    }
+  ]
+}
