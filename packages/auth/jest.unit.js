@@ -8,6 +8,12 @@ module.exports = {
   },
   setupFiles: ['<rootDir>/jest.setup.ts'],
   testMatch: ['<rootDir>/src/test/unit/**/*.ts'],
+  modulePathIgnorePatterns: [
+    '<rootDir>/dist/',
+    '<rootDir>/node_modules/',
+    '<rootDir>/coverage/',
+    '<rootDir>/.git/',
+  ],
   coverageDirectory: '<rootDir>/coverage/unit',
   coveragePathIgnorePatterns: [],
   coverageThreshold: {
