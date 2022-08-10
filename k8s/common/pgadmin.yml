@@ -59,7 +59,7 @@ data:
           "Name": "auth",
           "Group": "Servers",
           "Port": 5432,
-          "Username": "root",
+          "Username": "postgres",
           "Host": "server-postgres",
           "SSLMode": "prefer",
           "MaintenanceDB": "postgres"

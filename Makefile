@@ -88,4 +88,4 @@ k8s_dashboard:
 	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
 
 k8s_database_create:
-	@kubectl exec -it deployment/server-postgres -- psql -c 'CREATE DATABASE auth WITH ENCODING UTF8;'
+	@kubectl exec -it deployment/server-postgres -- psql -U postgres -c 'CREATE DATABASE auth WITH ENCODING UTF8;'

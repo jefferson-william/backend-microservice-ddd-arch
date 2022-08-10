@@ -398,7 +398,7 @@ psql
 # Ou
 kubectl exec -it deployment/server-postgres -- psql
 # Ou fora do container e caso tenha psql instalado na sua máquina
-psql -h localhost -p 5432 -U root -d <db>
+psql -h localhost -p 5432 -U postgres -d <db>
 # Exemplo de comando postgres para ver os databases
 # Mais comandos: https://postgrescheatsheet.com
 \l
