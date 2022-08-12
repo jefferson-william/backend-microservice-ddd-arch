@@ -20,7 +20,7 @@ services:
     env_file:
       - .env
     ports:
-      - '30543:80'
+      - '16543:16543'
     depends_on:
       - server-postgres
     networks:
