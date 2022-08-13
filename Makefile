@@ -16,29 +16,29 @@ start: dev
 
 docker_init:
 	@docker-compose \
-		-f docker/local.yml \
-		-f docker/base.yml \
+		-f docker/common.yml \
+		-f docker/packages.yml \
 		pull
 
 docker_common_dev:
-	@docker-compose -f docker/local.yml up
+	@docker-compose -f docker/common.yml up
 
 docker_database_create:
-	@docker-compose -f docker/local.yml exec server-postgres psql -U postgres -c 'CREATE DATABASE auth WITH ENCODING UTF8;'
+	@docker-compose -f docker/common.yml exec server-postgres psql -U postgres -c 'CREATE DATABASE auth WITH ENCODING UTF8;'
 
 docker_dev:
-	@docker-compose -f docker/base.yml up
+	@docker-compose -f docker/packages.yml up
 
 docker_build:
 	@docker-compose \
-		-f docker/local.yml \
-		-f docker/base.yml \
+		-f docker/common.yml \
+		-f docker/packages.yml \
 		build
 
 docker_stop:
 	@docker-compose \
-		-f docker/local.yml \
-		-f docker/base.yml \
+		-f docker/common.yml \
+		-f docker/packages.yml \
 		stop
 
 k8s_init:
