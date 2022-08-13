@@ -3,11 +3,17 @@ module.exports = {
   testEnvironment: 'node',
   globals: {
     'ts-jest': {
-      tsconfig: '../../tsconfig.api.json',
+      tsconfig: 'tsconfig.api.json',
     },
   },
   setupFiles: ['<rootDir>/jest.setup.api.ts'],
   testMatch: ['<rootDir>/src/test/api/**/*.ts'],
+  modulePathIgnorePatterns: [
+    '<rootDir>/dist/',
+    '<rootDir>/node_modules/',
+    '<rootDir>/coverage/',
+    '<rootDir>/.git/',
+  ],
   coverageDirectory: '<rootDir>/coverage/api',
   coveragePathIgnorePatterns: [
     '<rootDir>/src/domain/entity',

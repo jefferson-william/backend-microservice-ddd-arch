@@ -30,6 +30,6 @@
     "resolveJsonModule": true,
     "isolatedModules": false
   },
-  "include": [],
+  "include": ["src/**/*.ts"],
   "exclude": ["**/node_modules", "**/dist", "**/build", "**/test", "**/.git", "**/__mocks__/"]
 }

@@ -1,0 +1,14 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: server-packages
+build:
+  artifacts:
+    - image: jefferson-william/server-auth
+      context: packages/auth
+      docker:
+        dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+      - packages/**/src/infra/container/k8s/*.yml

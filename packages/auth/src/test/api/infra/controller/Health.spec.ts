@@ -9,7 +9,7 @@ describe('/health', () => {
 
   describe('should test success', () => {
     describe('should test i18n languages', () => {
-      it('should return success in pt-br with default', async () => {
+      it('should return success in pt-BR with default', async () => {
         const response = await requester.get('/health').send()
         expect(response.body).toMatchObject({
           error: [],

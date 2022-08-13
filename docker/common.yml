@@ -1,62 +1,66 @@
 version: '3'
 
 services:
-  postgres:
-    image: 'postgres:alpine'
+  server-postgres:
+    image: 'postgres:14.4-alpine'
+    restart: unless-stopped
     ports:
       - '5432:5432'
     volumes:
-      - 'postgresql_data:/var/lib/postgresql'
+      - postgresql_data:/var/lib/postgresql
     env_file:
-      - ../../environment/.env.local
+      - .env
     networks:
-      - app-net
+      - net
       - pgadmin
 
-  pgadmin:
+  server-pgadmin:
     image: dpage/pgadmin4
+    restart: unless-stopped
     env_file:
-      - ../../environment/.env.local
+      - .env
     ports:
-      - '16543:80'
+      - '16543:16543'
     depends_on:
-      - postgres
+      - server-postgres
     networks:
       - pgadmin
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
-  zookeeper:
+  server-zookeeper:
     image: 'bitnami/zookeeper:3'
+    restart: unless-stopped
     ports:
       - '2181:2181'
       - '8080:8080'
     volumes:
       - 'zookeeper_data:/bitnami'
     env_file:
-      - ../../environment/.env.local
+      - .env
     networks:
-      - app-net
+      - net
     depends_on:
-      - postgres
+      - server-postgres
 
-  kafka:
+  server-kafka:
     image: 'bitnami/kafka:3'
+    restart: unless-stopped
     ports:
       - '9092:9092'
     volumes:
       - 'kafka_data:/bitnami'
     env_file:
-      - ../../environment/.env.local
+      - .env
     depends_on:
-      - postgres
-      - zookeeper
+      - server-postgres
+      - server-zookeeper
     networks:
-      - app-net
+      - net
 
 networks:
   pgadmin:
-  app-net:
+  net:
     driver: bridge
 
 volumes:

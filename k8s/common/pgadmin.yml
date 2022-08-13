@@ -1,0 +1,68 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: server-pgadmin
+  labels:
+    app: server-pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-pgadmin
+  template:
+    metadata:
+      labels:
+        app: server-pgadmin
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: server-pgadmin
+          image: 'dpage/pgadmin4'
+          ports:
+            - containerPort: 16543
+          envFrom:
+            - configMapRef:
+                name: server-env
+          volumeMounts:
+            - name: server-pgadmin-servers
+              mountPath: /pgadmin4/servers.json
+              subPath: servers.json
+              readOnly: true
+      volumes:
+        - name: server-pgadmin-servers
+          configMap:
+            name: server-pgadmin-servers
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: server-pgadmin
+  name: server-pgadmin
+spec:
+  selector:
+    app: server-pgadmin
+  ports:
+    - port: 16543
+      targetPort: 16543
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: server-pgadmin-servers
+data:
+  servers.json: |
+    {
+      "Servers": {
+        "1": {
+          "Name": "auth",
+          "Group": "Servers",
+          "Port": 5432,
+          "Username": "postgres",
+          "Host": "server-postgres",
+          "SSLMode": "prefer",
+          "MaintenanceDB": "postgres"
+        }
+      }
+    }

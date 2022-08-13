@@ -10,7 +10,7 @@ describe('/login', () => {
 
   describe('should test failure', () => {
     describe('should not be able to login for not informing the data', () => {
-      it('should test in pt-br', async () => {
+      it('should test in pt-BR', async () => {
         const response = await requester.post('/login')
         expect(response).toMatchObject(
           expect.objectContaining({
