@@ -20,11 +20,14 @@ docker_init:
 		-f docker/base.yml \
 		pull
 
+docker_common_dev:
+	@docker-compose -f docker/local.yml up
+
+docker_database_create:
+	@docker-compose -f docker/local.yml exec server-postgres psql -U postgres -c 'CREATE DATABASE auth WITH ENCODING UTF8;'
+
 docker_dev:
-	@docker-compose \
-		-f docker/local.yml \
-		-f docker/base.yml \
-		up -d
+	@docker-compose -f docker/base.yml up
 
 docker_build:
 	@docker-compose \

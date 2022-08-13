@@ -76,8 +76,11 @@ Segue os principais comandos presente em qualquer `Makefile`:
 # Necessário na primeira vez
 make bootstrap
 # Via docker
+make docker_init
+make docker_common_dev # sempre deve ser rodado num terminal paralelo
+make docker_database_create # criar os databases para rodar as migrações
 make docker_build
-make docker_dev # vai ser necessário criar os databases manualmente, pausar e rodar novamente
+make docker_dev # deve ser rodado em outro terminal
 make docker_stop
 # Via kubernetes
 make k8s_init
