@@ -1,0 +1,16 @@
+{
+  "error": {
+    "internal_server_error": "Erro interno no servidor",
+    "missing_data": "Dados faltando"
+  },
+  "treatment": {
+    "user_not_found": "Usuário não encontrado",
+    "course_not_found": "Curso não encontrado",
+    "student_not_found": "Estudante não encontrado",
+    "enrollment_not_found": "Matrícula não encontrado",
+    "incorrect_password": "Senha incorreta"
+  },
+  "generic": {
+    "server_is_ok": "O servidor está ok"
+  }
+}

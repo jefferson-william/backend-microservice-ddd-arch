@@ -20,12 +20,12 @@ export class User {
     }
   }
 
-  get id() {
-    return this.data.id
+  get uuid() {
+    return this.data.uuid as string
   }
 
-  get uuid() {
-    return this.data.uuid
+  get id() {
+    return this.data.id
   }
 
   get email() {
