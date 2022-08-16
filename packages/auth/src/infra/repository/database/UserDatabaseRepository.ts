@@ -28,7 +28,7 @@ export class UserDatabaseRepository implements UserRepository {
     return count
   }
 
-  async save(user: User): Promise<void> {
+  async create(user: User): Promise<void> {
     await this.connection.query(
       `INSERT INTO ${this.table} (email, password, firstName, lastName, uuid, middleName) VALUES ($1, $2, $3, $4, $5, $6)`,
       [user.email, user.password, user.firstName, user.lastName, user.uuid, user.middleName],

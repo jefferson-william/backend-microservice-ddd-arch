@@ -4,6 +4,6 @@ export interface UserRepository {
   findByEmail(email: string): Promise<User>
   list(): Promise<User[]>
   count(): Promise<number>
-  save(user: User): Promise<void>
+  create(user: User): Promise<void>
   clear(): Promise<void>
 }

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-classroom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-classroom
+  template:
+    metadata:
+      labels:
+        app: server-classroom
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '3002'
+        prometheus.io/path: '/health'
+    spec:
+      containers:
+        - name: server-classroom
+          image: jefferson-william/server-classroom:latest
+          ports:
+            - containerPort: 3002
+          envFrom:
+            - configMapRef:
+                name: server-classroom-env
+          volumeMounts:
+            - name: server-classroom-config
+              mountPath: /app/config
+      volumes:
+        - name: server-classroom-config
+          configMap:
+            name: server-classroom-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-classroom
+spec:
+  selector:
+    app: server-classroom
+  ports:
+    - port: 3002
+      targetPort: 3002
+  type: LoadBalancer
