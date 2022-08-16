@@ -16,7 +16,17 @@ export class CourseDatabaseRepository implements CourseRepository {
       [purchasesProductId],
     )
     if (!course) throw new NotFoundError(this.i18n.t('treatment.course_not_found'))
-    return this.getUserInstanced(course)
+    return this.getCourseInstanced(course)
+  }
+
+  async list(): Promise<Course[]> {
+    const users: Course[] = await this.connection.query(`SELECT * FROM ${this.table} LIMIT 100`, [])
+    return users.map((user) => this.getCourseInstanced(user))
+  }
+
+  async count(): Promise<number> {
+    const [count] = await this.connection.query(`SELECT COUNT(id)::int FROM ${this.table}`, [])
+    return count
   }
 
   async create(data: Course): Promise<void> {
@@ -31,7 +41,7 @@ export class CourseDatabaseRepository implements CourseRepository {
     await this.connection.query(`DELETE FROM ${this.table}`, [])
   }
 
-  private getUserInstanced(data: Course) {
+  private getCourseInstanced(data: Course) {
     return new Course(
       {
         id: data.id,

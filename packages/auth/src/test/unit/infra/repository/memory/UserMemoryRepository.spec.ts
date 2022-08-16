@@ -20,7 +20,7 @@ describe('UserMemoryRepository', () => {
   })
 
   describe('should test success', () => {
-    it('should save and get user', async () => {
+    it('should create and get user', async () => {
       const userRepository = new UserMemoryRepository(i18n)
       const passwordHash = await Crypto.encrypt('123456')
       const user = new User(
@@ -34,7 +34,7 @@ describe('UserMemoryRepository', () => {
         },
         null,
       )
-      userRepository.save(user)
+      userRepository.create(user)
       const data = await userRepository.findByEmail(user.email)
       const list = await userRepository.list()
       const count = await userRepository.count()

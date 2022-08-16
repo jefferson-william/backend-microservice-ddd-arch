@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  auth:
+  classroom:
     build: ../../../../
     restart: unless-stopped
     command: yarn dev
@@ -21,4 +21,4 @@ networks:
     driver: bridge
 
 volumes:
-  auth_node_modules:
+  classroom_node_modules:

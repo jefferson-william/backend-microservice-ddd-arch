@@ -4,8 +4,8 @@ metadata:
   name: server
 build:
   artifacts:
-    - image: jefferson-william/server-auth
-      context: packages/auth
+    - image: jefferson-william/server-classroom
+      context: packages/classroom
       docker:
         dockerfile: Dockerfile
       sync:
@@ -14,4 +14,4 @@ build:
 deploy:
   kubectl:
     manifests:
-      - packages/auth/src/infra/container/k8s/deployment.yml
+      - packages/classroom/src/infra/container/k8s/deployment.yml

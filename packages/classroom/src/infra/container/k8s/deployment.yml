@@ -1,54 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-auth
+  name: server-classroom
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: server-auth
+      app: server-classroom
   template:
     metadata:
       labels:
-        app: server-auth
+        app: server-classroom
       annotations:
         prometheus.io/scrape: 'true'
-        prometheus.io/port: '3001'
+        prometheus.io/port: '3002'
         prometheus.io/path: '/health'
     spec:
       containers:
-        - name: server-auth
-          image: jefferson-william/server-auth:latest
+        - name: server-classroom
+          image: jefferson-william/server-classroom:latest
           ports:
-            - containerPort: 3001
+            - containerPort: 3002
           envFrom:
             - configMapRef:
-                name: server-auth-env
+                name: server-classroom-env
           volumeMounts:
-            - name: server-auth-config
+            - name: server-classroom-config
               mountPath: /app/config
-        # - name: server-auth-migrations
-        #   image: jefferson-william/server-auth:latest
-        #   command: ['yarn migration']
-        #   envFrom:
-        #     - configMapRef:
-        #         name: server-auth-env
-        #   volumeMounts:
-        #     - name: server-auth-config
-        #       mountPath: /app/config
       volumes:
-        - name: server-auth-config
+        - name: server-classroom-config
           configMap:
-            name: server-auth-env
+            name: server-classroom-env
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-auth
+  name: server-classroom
 spec:
   selector:
-    app: server-auth
+    app: server-classroom
   ports:
-    - port: 3001
-      targetPort: 3001
+    - port: 3002
+      targetPort: 3002
   type: LoadBalancer

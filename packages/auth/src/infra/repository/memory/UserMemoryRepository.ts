@@ -22,7 +22,7 @@ export class UserMemoryRepository implements UserRepository {
     return data.length
   }
 
-  async save(user: User): Promise<void> {
+  async create(user: User): Promise<void> {
     data.push(user)
   }
 

@@ -14,7 +14,19 @@ export class StudentMemoryRepository implements StudentRepository {
     return student
   }
 
+  async list(): Promise<Student[]> {
+    return data
+  }
+
+  async count(): Promise<number> {
+    return data.length
+  }
+
   async create(student: Student): Promise<void> {
     data.push(student)
+  }
+
+  async clear(): Promise<void> {
+    data = []
   }
 }

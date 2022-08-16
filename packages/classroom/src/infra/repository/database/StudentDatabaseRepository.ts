@@ -15,7 +15,20 @@ export class StudentDatabaseRepository implements StudentRepository {
       email,
     ])
     if (!student) throw new NotFoundError(this.i18n.t('treatment.student_not_found'))
-    return this.getUserInstanced(student)
+    return this.getStudentInstanced(student)
+  }
+
+  async list(): Promise<Student[]> {
+    const users: Student[] = await this.connection.query(
+      `SELECT * FROM ${this.table} LIMIT 100`,
+      [],
+    )
+    return users.map((user) => this.getStudentInstanced(user))
+  }
+
+  async count(): Promise<number> {
+    const [count] = await this.connection.query(`SELECT COUNT(id)::int FROM ${this.table}`, [])
+    return count
   }
 
   async create(data: Student): Promise<void> {
@@ -30,7 +43,7 @@ export class StudentDatabaseRepository implements StudentRepository {
     await this.connection.query(`DELETE FROM ${this.table}`, [])
   }
 
-  private getUserInstanced(data: Student) {
+  private getStudentInstanced(data: Student) {
     return new Student(
       {
         id: data.id,

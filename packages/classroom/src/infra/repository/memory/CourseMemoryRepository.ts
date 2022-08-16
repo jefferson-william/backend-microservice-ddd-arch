@@ -14,7 +14,19 @@ export class CourseMemoryRepository implements CourseRepository {
     return course
   }
 
+  async list(): Promise<Course[]> {
+    return data
+  }
+
+  async count(): Promise<number> {
+    return data.length
+  }
+
   async create(course: Course): Promise<void> {
     data.push(course)
+  }
+
+  async clear(): Promise<void> {
+    data = []
   }
 }
